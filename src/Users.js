@@ -40,19 +40,21 @@ componentWillMount(){
   render() {
     return (
            <div>
-
-            <ul>
-              {
-                 this.state.UserList.map((user,k)=>{
-                       return (
-                           <li key={k}><a role="button" onClick={this.onClick} name={user.login}>{user.login}</a></li>
-                       )
-                 })
-             }
+             <div className="toMakeItInline">
+             <h2>Users</h2>
+             <ul>
+               {
+                  this.state.UserList.map((user,k)=>{
+                        return (
+                            <li key={k}><a role="button" onClick={this.onClick} name={user.login}>{user.login}</a></li>
+                        )
+                  })
+               }
 
             </ul>
+            </div>
           {  this.state.repos.length !==0 ? (
-           <div><h2>Repositories</h2>
+           <div className="toMakeItInline"><h2>Repositories</h2>
            <ul>
               {
                  this.state.repos.map((repo,k)=>{
@@ -65,6 +67,7 @@ componentWillMount(){
             </ul>
             </div>)
              :
+
             <p>Please select a user</p>
 
            }
