@@ -1,36 +1,25 @@
 import React,{ Component } from 'react';
 import axios from 'axios';
+import {observer} from 'mobx-react';
 
+@observer
 class Users extends Component {
-
-  constructor(props){
-     super(props);
-        this.state={UserList:[],repos:[]};
-        this.onClick= this.onClick.bind(this);
- }
 
 componentWillMount(){
      axios.get('https://api.github.com/search/users?q=repos:>42+followers:>1000')
      .then((response)=>{
-
-      let users = response.data.items;
-      this.setState({
-        UserList: users
-     });
-
-   })
-   .catch((error)=>{
-    console.log(error);
-   });
- }
+       this.props.UserStore.users.replace(response.data.items);
+       console.log(this.props.UserStore.users);
+      })
+     .catch((error)=>{
+        console.log(error);
+      });
+  }
 
  onClick(event){
      axios.get('https://api.github.com/users/'+event.target.name+'/repos')
      .then((response)=>{
-         let reps =response.data;
-         this.setState({
-              repos: reps
-     });
+          this.props.UserStore.repos.replace(response.data);
    })
    .catch((error)=>{
     console.log(error);
@@ -44,20 +33,20 @@ componentWillMount(){
              <h2>Users</h2>
              <ul>
                {
-                  this.state.UserList.map((user,k)=>{
+                  this.props.UserStore.users.map((user,k)=>{
                         return (
-                            <li key={k}><a role="button" onClick={this.onClick} name={user.login}>{user.login}</a></li>
+                            <li key={k}><a role="button" onClick={this.onClick.bind(this)} name={user.login}>{user.login}</a></li>
                         )
                   })
                }
 
             </ul>
             </div>
-          {  this.state.repos.length !==0 ? (
+          {  this.props.UserStore.repoCount !==0 ? (
            <div className="toMakeItInline"><h2>Repositories</h2>
            <ul>
               {
-                 this.state.repos.map((repo,k)=>{
+                 this.props.UserStore.repos.map((repo,k)=>{
                        return (
                            <li key={k}>{repo.name}</li>
                        )
@@ -67,7 +56,6 @@ componentWillMount(){
             </ul>
             </div>)
              :
-
             <p>Please select a user</p>
 
            }
