@@ -9,7 +9,7 @@ componentWillMount(){
      axios.get('https://api.github.com/search/users?q=repos:>42+followers:>1000')
      .then((response)=>{
        this.props.UserStore.users.replace(response.data.items);
-       console.log(this.props.UserStore.users);
+
       })
      .catch((error)=>{
         console.log(error);
